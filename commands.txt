@@ -1,0 +1,57 @@
+mkdir - 
+    makes a new directory
+    ex: mkdir cmsi387
+    makes a folder called cmsi387
+    
+git -
+    creats and interacts with a git repository
+    ex: git clone https://github.com/person/hello.git
+    clones person's github repository hello.git
+    
+javac -
+    calls the java compiler
+    ex: javac HelloWorld.java
+    compiles HelloWorld.java
+ 
+echo - 
+    echoes the arguments that come after and recognizes escape characters
+    ex: echo hello world!
+    hello world!
+    
+touch -
+    updates the access and modification times of a file
+    ex: touch file.txt
+    sets the last access and modification times of this file to the current date and time
+    
+ruby -
+    runs a .rb file
+    ex: ruby hello.rb
+    runs hello.rb
+ 
+which - 
+    locates a file
+    ex: which ruby
+    shows the location of ruby including path
+    
+PATH -
+    variable specifying where executable programs are located
+    ex: $PATH
+    shows the PATH
+    
+cp -
+    copies files from one location to another
+    ex: cp hello.java cmsi186
+    copies the file hello.java to the cmsi186 directory
+    
+rm -
+    removes a file or directory from the filesystem
+    ex: rm count.java
+    removes count.java
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
