@@ -1,0 +1,44 @@
+. - source
+cd ..
+open the parent directory of the one I am currently in
+
+# - indicates a comment and will not be executed
+# This is a comment.
+this is just a comment so nothing will be executed
+
+; - allows multiple commands on a line
+echo hello; echo world
+this prints out: hello
+                 world
+
+/ - refers to a directory
+cd /
+this command opens the home directory
+
+* - matches every filename in a given directory
+cd Documents; echo *
+this command opens the Documents directory and prints all the filenames in it
+
+| - a pipe takes the output of what is on the left and uses it as input for what is on the right
+java HelloWorld | hexdump
+shows the hexadecimal representation of the HelloWorld class's output
+
+&& - logical and operator will run the argument on the left then the right
+echo operating && echo systems
+this prints operating
+            systems
+
+|| - logical or operator will run the argument on the right only if the left returns false
+echo hello || echo world
+this prints just hello
+
+~ - home directory
+ls ~/
+this shows the contents of the home directory
+
+!! - execute the previous command
+cd ..
+echo !!
+this commands prints: echo cd ..
+                      cd ..       
+the last command was cd .. and I told it to echo that 
