@@ -33,11 +33,11 @@ which -
     ex: which ruby
     shows the location of ruby including path
     
-PATH -
-    variable specifying where executable programs are located
-    ex: $PATH
-    shows the PATH
-    
+grep -
+    searches and input files and matches a regular expression pattern
+    ex: grep dog pets.txt
+    finds the sequence of characters dog in pets.txt
+
 cp -
     copies files from one location to another
     ex: cp hello.java cmsi186
