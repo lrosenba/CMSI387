@@ -33,7 +33,9 @@ int main() {
        waitflg = true; 
        /* String to hold the command to run. */
        printf("Enter the command to run: ");
-       fgets(command, MAXBUF, stdin);
+       if (fgets(command, MAXBUF, stdin) == NULL) {
+          exit(EXIT_SUCCESS);
+       }
        printf("command = %s", command);
        strcpy(tmp_input, command);
  
