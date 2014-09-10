@@ -7,6 +7,9 @@
 #include <stdlib.h>
 #include <errno.h>
 
+//This program will create a file with the name and permissions passed as arguments.
+//Permissions must be passed as an octal number.
+
 int main(int argc, char* argv[]) {
         if (argc != 3) {
            printf("usage: %s <filename> <octal mode>\n", argv[0]);
@@ -18,4 +21,9 @@ int main(int argc, char* argv[]) {
         if (ret == -1) {
            perror("syscall 8");
         }
+        //Verify file was created
+        char cmdstr[512];
+        printf("Verifing file was created using ls -l\n");
+        sprintf(cmdstr, "ls -l %s\n", argv[1]);
+        system(cmdstr);
 }

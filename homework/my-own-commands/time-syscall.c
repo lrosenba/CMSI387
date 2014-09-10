@@ -8,6 +8,8 @@
 #include <errno.h>
 #include <time.h>
 
+//This program will print the current time
+
 int main(int argc, char* argv[]) {
     long secs;
     struct tm *time;
