@@ -5,7 +5,7 @@
 #include <sys/stat.h>
 
 int main(int argc, char* argv[]) {
-    syscall(8, argv[1], 0744);
+    syscall(8, argv[1], argv[2]);
 }
 
 
