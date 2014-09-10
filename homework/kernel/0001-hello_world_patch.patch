@@ -1,0 +1,103 @@
+From 3434523f4b7079c29ea33dbdc6a430459f7cd57e Mon Sep 17 00:00:00 2001
+From: Lisa <lrosenba@LisaUbuntu.(none)>
+Date: Sun, 7 Sep 2014 19:52:41 -0700
+Subject: [PATCH] hello_world_patch
+
+---
+ Makefile                           |    2 +-
+ arch/sh/kernel/syscalls_32.S       |    1 +
+ arch/x86/include/asm/unistd_32.h   |    4 ++--
+ arch/x86/kernel/syscall_table_32.S |    1 +
+ hello_world/Makefile               |    1 +
+ hello_world/hello_world.c          |    9 +++++++++
+ include/linux/syscalls.h           |    2 ++
+ 7 files changed, 17 insertions(+), 3 deletions(-)
+ create mode 100644 hello_world/Makefile
+ create mode 100644 hello_world/hello_world.c
+
+diff --git a/Makefile b/Makefile
+index 207f3d7..2fec77e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -717,7 +717,7 @@ export mod_strip_cmd
+ 
+ 
+ ifeq ($(KBUILD_EXTMOD),)
+-core-y		+= kernel/ mm/ fs/ ipc/ security/ crypto/ block/
++core-y		+= kernel/ mm/ fs/ ipc/ security/ crypto/ block/ hello_world/
+ 
+ vmlinux-dirs	:= $(patsubst %/,%,$(filter %/, $(init-y) $(init-m) \
+ 		     $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
+diff --git a/arch/sh/kernel/syscalls_32.S b/arch/sh/kernel/syscalls_32.S
+index ee56a9b..03d295a 100644
+--- a/arch/sh/kernel/syscalls_32.S
++++ b/arch/sh/kernel/syscalls_32.S
+@@ -384,3 +384,4 @@ ENTRY(sys_call_table)
+ 	.long sys_setns
+ 	.long sys_process_vm_readv	/* 365 */
+ 	.long sys_process_vm_writev
++        .long sys_hello_world
+diff --git a/arch/x86/include/asm/unistd_32.h b/arch/x86/include/asm/unistd_32.h
+index 599c77d..673e47e 100644
+--- a/arch/x86/include/asm/unistd_32.h
++++ b/arch/x86/include/asm/unistd_32.h
+@@ -354,10 +354,10 @@
+ #define __NR_setns		346
+ #define __NR_process_vm_readv	347
+ #define __NR_process_vm_writev	348
+-
++#define __NR_hello_world        349
+ #ifdef __KERNEL__
+ 
+-#define NR_syscalls 349
++#define NR_syscalls 350
+ 
+ #define __ARCH_WANT_IPC_PARSE_VERSION
+ #define __ARCH_WANT_OLD_READDIR
+diff --git a/arch/x86/kernel/syscall_table_32.S b/arch/x86/kernel/syscall_table_32.S
+index 9a0e312..67eba55 100644
+--- a/arch/x86/kernel/syscall_table_32.S
++++ b/arch/x86/kernel/syscall_table_32.S
+@@ -348,3 +348,4 @@ ENTRY(sys_call_table)
+ 	.long sys_setns
+ 	.long sys_process_vm_readv
+ 	.long sys_process_vm_writev
++        .long sys_hello_world
+diff --git a/hello_world/Makefile b/hello_world/Makefile
+new file mode 100644
+index 0000000..5eecf75
+--- /dev/null
++++ b/hello_world/Makefile
+@@ -0,0 +1 @@
++obj-y := hello_world.o
+diff --git a/hello_world/hello_world.c b/hello_world/hello_world.c
+new file mode 100644
+index 0000000..b018056
+--- /dev/null
++++ b/hello_world/hello_world.c
+@@ -0,0 +1,9 @@
++#include <linux/syscalls.h>
++
++asmlinkage long sys_hello_world()
++{
++  printk("Hello World!\n");
++  return 0;
++}
++
++//got some code help from: http://www.csee.umbc.edu/~chettri/421/projects/hello_syscall.html
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index 86a24b1..b7abc7d 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -826,6 +826,8 @@ asmlinkage long sys_fanotify_mark(int fanotify_fd, unsigned int flags,
+ 				  const char  __user *pathname);
+ asmlinkage long sys_syncfs(int fd);
+ 
++asmlinkage long sys_hello_world(void);
++
+ int kernel_execve(const char *filename, const char *const argv[], const char *const envp[]);
+ 
+ 
+-- 
+1.7.9.5
+

@@ -1,0 +1,121 @@
+<!doctype html>
+
+<html>
+    <head>
+    </head>
+
+    <body>
+        <h1>Building and Modifying an Ubuntu 3.2 Kernel</h1>
+        <p>On this page, I will be describing the necessary steps to build and modify a kernel by adding a new system call called hello_world.</p>
+        <div>
+           <h2>First We need to get the source code.</h2>
+           <p>I got the source code from git.  You can clone the source code using the following command.</p>
+           <code>git clone git://kernel.ubuntu.com/ubuntu/ubuntu-precise.git</code>
+        </div> 
+        <div>
+            <h2>Next We need to prepare the environment.</h2>
+            <p> Please use the following command to install the necessary packages for building a kernel.</p>
+            <code>sudo apt-get build-dep linux-image-$(uname -r)</code>
+        </div>
+        <div>
+            <h2>Next we make any configuration modifications we need or want</h2>
+            <p>The following commands will run menuconfig for each architecture's/flavour's configuration.</p>
+            <code>
+                chmod a+x debian/scripts/*<br />
+                chmod a+x debian/scripts/misc/*<br />
+                fakeroot debian/rules clean<br />
+                fakeroot debian/rules editconfigs
+            </code>
+        </div>
+        <div>
+            <h2>Now we can build the kernel.</h2>
+            <p>Run the following commands to build the kernel.</p>
+            <code>
+                fakeroot debian/rules clean<br />
+                fakeroot debian/rules binary-headers binary-generic
+            </code>
+            <p>This should have created three new files in the directory above the build root directory.</p>
+            <code>
+                linux-headers-3.2.0-60_3.2.0-60.91_all.deb<br />
+                linux-headers-3.2.0-60-generic_3.2.0-60.91_i386.deb<br />
+                linux-image-3.2.0-60-generic_3.2.0-60.91_i386.deb
+            </code>
+        </div>
+        <div>
+            <h2>It is time to test the kernel!</h2>
+            <p>Run the following commands to install the three new packages you just created.</p>
+            <code>
+                sudo dpkg -i linux*3.2.0-60.91*.deb<br />
+                sudo reboot
+            </code>
+            <p>While the linux box is booting press the F12 key.  Then hold down the shift key and press 1 and continue holding the shift key.  This should open GRUB.  Now select the kernel you just created.  You should now be using the kernel you just created.</p>
+        </div>
+        <div>
+           <h2>Now we can modify the kernel</h2>
+           <p>I am going to show how to add a system call called hello_world.</p>
+           <p>Update the syscall table by opening ubuntu-precise/arch/x86/kernel/syscall_table_32.S and arch/sh/kernel/syscalls_32.S and appending .long sys_hello_world at the end.</p>
+           <p>In order to tell the kernel the syscall number, append #define __NR_hello_world 349 after the "#define __NR_process_vm_writev  348" line in the arch/x86/include/asm/unistd_32.h.</p>
+           <p>Finally apend the line asmlinkage long sys_hello_world(void); before the line that says int kernel_execve... in the include/linux/syscalls.h file </p>  
+        </div>
+        <div>
+            <h2>Time to create the hello_world code</h2>
+            <p>Here is an example hello_world.c file.</p>
+            <code>
+                #include <linux/syscalls.h><br />
+
+                asmlinkage long sys_hello_world()<br />
+                {<br />
+                    printk("Hello World!\n");<br />
+                    return 0;<br />
+                } 
+            </code>
+            <p>I saved this file in a hello_world folder I created in the build root directory.</p>
+        </div>
+        <div>
+            <h2>Now to compile the hello_world.c program</h2>
+            <p>In the hello_world folder, create a Makefile and add the following code.</p>
+            <code>obj-y := hello_world.o</code>
+            <p> Now edit the Makefile in the build root directory.  Change the line that says:</p>
+            <code>core-y  += kernel/ mm/ fs/ ipc/ security/ crypto/ block/</code>
+            <p> to </p>
+            <code>core-y  += kernel/ mm/ fs/ ipc/ security/ crypto/ block/ hello_world/</code>
+            <p>Move the three kernel package files that were created when you first installed the kernel to another folder so they will not be overwritten.  Now rebuild and reinstall the kernel!</p>  
+        </div>
+        <div>
+            <h2>Finally, we will make a C program to run the syscall</h2>
+            <p>My program looks like this:</p>
+            <code>
+                #include <stdio.h><br />
+                #include <linux/kernel.h><br />
+                #include <sys/syscall.h><br />
+                #include <unistd.h><br />
+
+                #define _NR_hello_world 349<br />
+
+                long hello_world_syscall(void) {<br />
+                    return syscall(_NR_hello_world);<br />
+                }<br /> 
+
+                int main(int argc, char *argv[]) {<br />
+                    long int a = hello_world_syscall();<br />
+                    printf("System call returned %Id\n", a);<br />
+                    return 0;<br />
+                }
+            </code>
+            <p>Run gcc hello_world.c to compile and the run the program with ./a.out.  You should see "System call returned 0" if successful!  You can then run dmesg to see the "hello world" message!</p>
+        </div>
+        <h2>You Have Now Successfully Built and Modified a Linux Kernel!!!</h2>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
