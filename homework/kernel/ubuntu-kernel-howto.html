@@ -61,18 +61,18 @@
             <h2>Time to create the hello_world code</h2>
             <p>Here is an example hello_world.c file.</p>
             <code>
-                #include <linux/syscalls.h><br />
+                #include &lt;linux/syscalls.h&gt;<br />
 
                 asmlinkage long sys_hello_world()<br />
                 {<br />
-                    printk("Hello World!\n");<br />
-                    return 0;<br />
+                   &nbsp; printk("Hello World!\n");<br />
+                   &nbsp; return 0;<br />
                 } 
             </code>
             <p>I saved this file in a hello_world folder I created in the build root directory.</p>
         </div>
         <div>
-            <h2>Now to compile the hello_world.c program</h2>
+            <h2>Now to compile the hello_world.c program within the kernel</h2>
             <p>In the hello_world folder, create a Makefile and add the following code.</p>
             <code>obj-y := hello_world.o</code>
             <p> Now edit the Makefile in the build root directory.  Change the line that says:</p>
@@ -83,26 +83,26 @@
         </div>
         <div>
             <h2>Finally, we will make a C program to run the syscall</h2>
-            <p>My program looks like this:</p>
+            <p>My program is called hello_world_run.c and it looks like this:</p>
             <code>
-                #include <stdio.h><br />
-                #include <linux/kernel.h><br />
-                #include <sys/syscall.h><br />
-                #include <unistd.h><br />
+                #include &lt;stdio.h&gt;<br />
+                #include &lt;linux/kernel.h&gt;<br />
+                #include &lt;sys/syscall.h&gt;<br />
+                #include &lt;unistd.h&gt;<br />
 
                 #define _NR_hello_world 349<br />
 
                 long hello_world_syscall(void) {<br />
-                    return syscall(_NR_hello_world);<br />
+                   &nbsp; return syscall(_NR_hello_world);<br />
                 }<br /> 
 
                 int main(int argc, char *argv[]) {<br />
-                    long int a = hello_world_syscall();<br />
-                    printf("System call returned %Id\n", a);<br />
-                    return 0;<br />
+                   &nbsp; long int a = hello_world_syscall();<br />
+                   &nbsp; printf("System call returned %Id\n", a);<br />
+                   &nbsp; return 0;<br />
                 }
             </code>
-            <p>Run gcc hello_world.c to compile and the run the program with ./a.out.  You should see "System call returned 0" if successful!  You can then run dmesg to see the "hello world" message!</p>
+            <p>Run "gcc hello_world_run.c" to compile and then run the program with "./a.out".  You should see "System call returned 0" if successful!  You can then run "dmesg" to see the "hello world" message in the kernel ring buffer!</p>
         </div>
         <h2>You Have Now Successfully Built and Modified a Linux Kernel!!!</h2>
     </body>

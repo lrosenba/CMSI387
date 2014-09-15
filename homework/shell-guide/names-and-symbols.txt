@@ -1,4 +1,4 @@
-. - source
+.. - parent directory
 example: cd ..
 open the parent directory of the one I am currently in
 
@@ -17,7 +17,7 @@ this command opens the root directory
 
 * - matches 0 or more characters in a file name
 example: cd ~; echo D*
-this set of commands opens the home directory and displays all the filenames starting with 'D'.  On my computer this currently presents: 
+this set of commands moves you to the home directory and displays all the filenames starting with 'D'.  On my computer this currently presents: 
 'Desktop Documents Downloads'  
 
 | - a pipe takes the output of the command on the left and uses it as input for the command on the right
